@@ -13,7 +13,7 @@ FILE="/dump/$PREFIX-$PGDB-$DATE.sql"
 
 echo "Job started: $(date). Dumping to ${FILE}"
 
-pg_dump -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -f "$FILE" -d "$PGDB" 
+pg_dump -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -f "$FILE" -d "$PGDB"
 gzip "$FILE"
 
 if [[ ! -z "${RETAIN_COUNT}" ]]; then

@@ -1,5 +1,5 @@
 FROM postgres:12.1
-MAINTAINER Andrew Rowe
+MAINTAINER rowe.andrew.d@gmail.com
 
 RUN apt-get update && \
     apt-get install -y cron && \
