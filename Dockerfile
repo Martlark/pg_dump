@@ -1,4 +1,4 @@
-FROM postgres:12.1
+FROM postgres:9
 MAINTAINER rowe.andrew.d@gmail.com
 
 RUN apt-get update && \
