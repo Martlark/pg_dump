@@ -8,7 +8,7 @@ database:
   restart: unless-stopped
 
 postgres-backup:
-  image: .
+  build: .
   container_name: postgres-backup
   links:
     - database:db # Maps as "db"
@@ -20,4 +20,4 @@ postgres-backup:
     - PGDB=postgres # The name of the database to dump
   #  - PGHOST=db # The hostname of the PostgreSQL database to dump
   volumes:
-    - ./persistent/dump
+    - ./persistent/dump:/dump
