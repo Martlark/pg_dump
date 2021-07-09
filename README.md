@@ -40,7 +40,7 @@ postgres-backup:
   environment:
     - PGUSER=postgres
     - PGPASSWORD=SumPassw0rdHere
-    - CRON_SCHEDULE=* 3 * * * # Every day at 3am
+    - CRON_SCHEDULE=0 3 * * * # Every day at 3am
     - RETAIN_COUNT=1 # Keep this number of backups
     - PGDB=postgres # The name of the database to dump 
   #  - PGHOST=db # The hostname of the PostgreSQL database to dump
