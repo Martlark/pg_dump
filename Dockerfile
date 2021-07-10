@@ -1,4 +1,5 @@
-FROM postgres:12.1
+ARG POSTGRES_VERSION=12.1
+FROM postgres:${POSTGRES_VERSION}
 MAINTAINER rowe.andrew.d@gmail.com
 
 RUN apt-get update && \
