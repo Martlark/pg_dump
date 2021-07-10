@@ -1,5 +1,3 @@
-VERSIONS = 12.1 12.2
-
 login:
 	docker login
 
