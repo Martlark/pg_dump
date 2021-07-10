@@ -1,11 +1,14 @@
 martlark/pg_dump
 ================
 
-Postgres 12.1 Docker image with pg_dump running as a cron task. Find the image, here: https://hub.docker.com/repository/docker/martlark/pg_dump
+Postgres Docker image with pg_dump running as a cron task. Find the image,
+here: https://hub.docker.com/repository/docker/martlark/pg_dump
 
 ## Usage
 
-Attach a target postgres container to this container and mount a volume to container's `/dump` folder. Backups will appear in this volume. Optionally set up cron job schedule (default is `0 1 * * *` - runs every day at 1:00 am).
+Attach a target postgres container to this container and mount a volume 
+to a container's `/dump` folder. Backups will appear in this volume. 
+Optionally set up cron job schedule (default is `0 1 * * *` - runs every day at 1:00 am).
 
 ## Environment Variables:
 | Variable | Required? | Default | Description |
@@ -18,6 +21,9 @@ Attach a target postgres container to this container and mount a volume to conta
 | `CRON_SCHEDULE` | Required | 0 1 * * * | The cron schedule at which to run the pg_dump |
 | `RETAIN_COUNT` | Optional | `None` | Optionally, delete older files |
 | `PREFIX` | Optional | dump | Optionally, prefix for dump files |
+
+Docker Compose
+==============
 
 Example with docker-compose:
 
@@ -33,7 +39,7 @@ database:
   restart: unless-stopped
 
 postgres-backup:
-  image: martlark/pg_dump
+  image: martlark/pg_dump:12.1
   container_name: postgres-backup
   links:
     - database:db # Maps as "db"
@@ -48,3 +54,12 @@ postgres-backup:
     - ./persistent/data:/dump
 
 ```
+Tagged versions
+===============
+
+Versions available on docker hub are:
+
+    9.6 10.17 11.12 12.1 12.2 12.3 12.4 12.5 12.6 12.7 13.0 13.1
+	
+    latest is 13.1
+
