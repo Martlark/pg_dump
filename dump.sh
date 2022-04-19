@@ -16,12 +16,12 @@ echo "Job started: $(date). Dumping to ${FILE}"
 pg_dump -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -f "$FILE" -d "$PGDB"
 gzip "$FILE"
 
-if [[ ! -z "${RETAIN_COUNT}" ]]; then
+if [[ -n "${RETAIN_COUNT}" ]]; then
     file_count=1
     for file_name in $(ls -t /dump/*.gz); do
         if [[ ${file_count} > ${RETAIN_COUNT} ]]; then
             echo "Removing older dump file: ${file_name}"
-            rm ${file_name}
+            rm "${file_name}"
         fi
         ((file_count++))
     done
