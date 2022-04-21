@@ -11,5 +11,5 @@ RUN chmod +x /*.sh
 
 VOLUME /dump
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
 CMD ["dump-cron"]
