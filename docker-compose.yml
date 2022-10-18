@@ -1,7 +1,7 @@
 version: "3.9"
 services:
    database:
-     image: testing-pg-dump #martlark/pg_dump:12.1
+     image: martlark/pg_dump:12.1
      container_name: postgres-backup
      volumes:
        - postgres-data:/data:rw

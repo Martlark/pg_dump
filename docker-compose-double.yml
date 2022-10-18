@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   postgres-backup:
-    image: testing-pg-dump #martlark/pg_dump:12.1
+    image: martlark/pg_dump:12.1
     container_name: postgres-backup
     links:
       - database:db # Maps as "db"
