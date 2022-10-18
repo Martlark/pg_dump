@@ -10,11 +10,23 @@ fi
 CRON_SCHEDULE=${CRON_SCHEDULE:-0 1 * * *}
 PREFIX=${PREFIX:-dump}
 PGUSER=${PGUSER:-postgres}
-POSTGRES_DB=${POSTGRES_DB:-postgres}
-PGHOST=${PGHOST:-localhost}
 PGPORT=${PGPORT:-5432}
 PGDUMP=${PGDUMP:-'/dump'}
-POSTGRES_PASSWORD_FILE=${POSTGRES_PASSWORD_FILE:-'/run/secrets/db_password'}
+RUN_DOUBLE=${RUN_DOUBLE:-"true"}
+
+if [[ ${RUN_DOUBLE} == "true" ]];
+then
+   PGHOST=${PGHOST:-db}
+else
+   PGHOST=${PGHOST:-localhost}
+fi
+
+if [[ -n ${PGDB} ]];
+then
+   POSTGRES_DB=${PGDB:-postgres}
+else 
+   POSTGRES_DB=${POSTGRES_DB:-postgres}
+fi
 
 if [[ -n ${PG_LOG} ]];
 then
@@ -26,16 +38,28 @@ then
    echo "PGHOST: ${PGHOST}"
    echo "PGPORT: ${PGPORT}"
    echo "PGDUMP: ${PGDUMP}"
-   echo "POSTGRES_PASSWORD_FILE: ${POSTGRES_PASSWORD_FILE}"
+
+   if [[ -n ${POSTGRES_PASSWORD_FILE} ]];
+   then
+      echo "POSTGRES_PASSWORD_FILE: ${POSTGRES_PASSWORD_FILE}"
+   fi
 fi
 
-if [[ -f /run/secrets/db_password ]];
+if [[ -f ${POSTGRES_PASSWORD_FILE} ]];
 then
-   source /run/secrets/db_password
+   source ${POSTGRES_PASSWORD_FILE}
 else
-   echo "ERROR: No password file found!"
+   echo "WARN: No password file found!"
    echo "It is suggested that a docker secrets file is used for security concerns."
-   echo "If not, ensure that POSTGRES_PASSWORD is set."
+
+   if [[ -n ${PGPASSWORD} ]];
+   then
+      POSTGRES_PASSWORD=${PGPASSWORD}
+   elif [[ -z ${POSTGRES_PASSWORD} ]];
+   then
+      echo "ERROR: No POSTGRES_PASSWORD set!"
+      exit 1
+   fi
 fi
 
 if [[ "${COMMAND}" == 'dump' ]]; then
@@ -70,7 +94,13 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     echo -e "$CRON_ENV\n$CRON_SCHEDULE /dump.sh > $LOGFIFO 2>&1" | crontab -
     # crontab -l
     cron
-    /usr/local/bin/docker-entrypoint.sh postgres
+
+    if [[ "${RUN_DOUBLE}" == "true" ]];
+    then
+      tail -f ${LOGFIFO} # Run in two containers
+    else
+      /usr/local/bin/docker-entrypoint.sh postgres # Run in one container
+    fi
 else
     echo "Unknown command: $COMMAND"
     echo "Available commands: dump, dump-cron"
