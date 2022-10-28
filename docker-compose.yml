@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+   database:
+     image: martlark/pg_dump:12.1
+     container_name: postgres-backup
+     volumes:
+       - postgres-data:/data:rw
+       - postgres-backup:/dump:rw
+     environment:
+       - PGDATA=/data   # Where the SQL DB will store itself & backups will dump
+       - RETAIN_COUNT=1 # Keep this number of backups
+       - POSTGRES_DB=postgres    # The name of the database to dump
+       - CRON_SCHEDULE=0 3 * * * # Every day at 3am
+       - RUN_DOUBLE=false # Run postgresDB as part of this container
+       - POSTGRES_PASSWORD_FILE=/run/secrets/db_password # The password file
+     restart: unless-stopped
+     secrets:
+       - db_password # Contains the PSQL password
+
+volumes:
+   postgres-data:
+      external: true
+   postgres-backup:
+      external: true
+
+secrets:
+   db_password:
+     file: db_password.txt

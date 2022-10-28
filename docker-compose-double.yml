@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  database:
+    image: postgres:12.1
+    volumes:
+      - ./persistent/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=SumPassw0rdHere
+      - POSTGRES_DB=postgres
+    restart: unless-stopped
+
+  postgres-backup:
+    image: martlark/pg_dump:12.1
+    container_name: postgres-backup
+    links:
+      - database:db # Maps as "db"
+    environment:
+      - PGPASSWORD=SumPassw0rdHere
+      - CRON_SCHEDULE=0 3 * * * # Every day at 3am
+      - RETAIN_COUNT=1 # Keep this number of backups
+    volumes:
+      - ./persistent/data:/dump
+      
