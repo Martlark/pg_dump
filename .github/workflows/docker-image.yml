@@ -8,21 +8,15 @@ on:
 
 jobs:
 
-  build-all:
+  bld-and-push:
     strategy:
       matrix:
-        version: [9.6, 10.17, 11.12, 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.10, 13.0, 13.1, 13.6, 14.2]
+        version: [9.6, 10.17, 11.12, 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.10, 13.0, 13.1, 13.6, 14.2, latest]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: bld-and-push@v1
-      with:
-        POSTGRES_VERSION: ${{ matrix.version }}
-
-  build-latest:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: bld-and-push@v1
-      with:
-        POSTGRES_VERSION: latest
+      uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t brconn98/pg_dump:${{ matrix.version }} --file Dockerfile
+    - name: Push the Docker image - martlark
+      run: docker login docker.io && docker push brconn98/pg_dump:${{ matrix.version }}
