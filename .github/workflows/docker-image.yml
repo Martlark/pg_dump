@@ -1,8 +1,10 @@
 name: Docker Image CI
 
 on:
+  schedule:
+    - cron: '0 5 * * *'
   push:
-    branches: [ "master", "bconn98-actions" ]
+    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -23,7 +25,7 @@ jobs:
       uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
       with:
         registry: docker.io
-        username: brconn98
+        username: martlark
         password: ${{ secrets.DOCKER_PAT }}
-    - name: Push the Docker image - martlark
-      run: docker push brconn98/pg_dump:${{ matrix.version }}
+    - name: Push the Docker image
+      run: docker push martlark/pg_dump:${{ matrix.version }}
