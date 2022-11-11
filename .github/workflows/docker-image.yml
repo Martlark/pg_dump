@@ -19,7 +19,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t brconn98/pg_dump:${{ matrix.version }} --file Dockerfile
+      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t martlark/pg_dump:${{ matrix.version }} --file Dockerfile
     - name: Log into docker.io
       if: github.event_name != 'pull_request'
       uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
