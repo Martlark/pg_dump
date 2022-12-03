@@ -30,7 +30,7 @@ chown ${PGUSER}:${PGUSER} ${PGDUMP} && \
 mkdir ${PGDATA} && \
 chown ${PGUSER}:${PGUSER} ${PGDATA}
 
-VOLUME [ ${PGDUMP}, ${PGDATA} ]
+VOLUME [ "${PGDUMP}", "${PGDATA}" ]
 
 USER ${PGUSER}
 
