@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on:
+  schedule:
+    - cron: '0 5 * * *'
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  bld-and-push:
+    strategy:
+      matrix:
+        version: [9.6, 10.17, 11.12, 12.1, 12.2, 12.3, 12.4, 12.5, 12.6, 12.7, 12.10, 13.0, 13.1, 13.6, 14.2, latest]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t martlark/pg_dump:${{ matrix.version }} --file Dockerfile
+    - name: Log into docker.io
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
+      with:
+        registry: docker.io
+        username: martlark
+        password: ${{ secrets.DOCKER_PAT }}
+    - name: Push the Docker image
+      run: docker push martlark/pg_dump:${{ matrix.version }}
