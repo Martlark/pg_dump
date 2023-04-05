@@ -7,6 +7,9 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    
+env:
+  DOCKER_REG: brconn98
 
 jobs:
 
@@ -19,13 +22,13 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t martlark/pg_dump:${{ matrix.version }} --file Dockerfile
+      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t ${{ env.DOCKER_REG }}/pg_dump:${{ matrix.version }} --file Dockerfile
     - name: Log into docker.io
       if: github.event_name != 'pull_request'
       uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
       with:
         registry: docker.io
-        username: martlark
+        username: ${{ env.DOCKER_REG }}
         password: ${{ secrets.DOCKER_PAT }}
     - name: Push the Docker image
-      run: docker push martlark/pg_dump:${{ matrix.version }}
+      run: docker push ${{ env.DOCKER_REG }}/pg_dump:${{ matrix.version }}
