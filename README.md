@@ -42,13 +42,13 @@ the default. PGPORT is the exposed port in the container, so it is recommended n
 
 ## Docker Compose
 
-### Example of running with a single postgreSQL container.
+### Example of running with a single PostgreSQL container.
 
 ```yaml
 version: "3.9"
 services:
    database:
-     image: martlark/pg_dump:12.1
+     image: martlark/pg_dump:12.14
      container_name: postgres-backup
      volumes:
        - postgres-data:/data:rw
@@ -86,7 +86,7 @@ PGPASSWORD=SumPassw0rdHere
 version: "3.9"
 services:
   database:
-    image: postgres:12.1
+    image: postgres:12.14
     volumes:
       - ./persistent/data:/var/lib/postgresql/data
     environment:
@@ -95,7 +95,7 @@ services:
     restart: unless-stopped
 
   postgres-backup:
-    image: martlark/pg_dump:12.1
+    image: martlark/pg_dump:12.14
     container_name: postgres-backup
     links:
       - database:db # Maps as "db"
@@ -112,7 +112,7 @@ Tagged versions
 
 Versions available on docker hub are:
 
-    9.6 10.17 11.12 12.1 12.2 12.3 12.4 12.5 12.6 12.7 12.10 13.0 13.1 13.6 14.2
+    11.19 12.14 13.10 14.7 15.2``
 	
-    latest is 14.2
+    latest is 15.2
 
