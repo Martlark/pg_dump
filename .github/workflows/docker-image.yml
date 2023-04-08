@@ -19,7 +19,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Build the Docker image
+      if: matrix.version != '15.2'
       run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t martlark/pg_dump:${{ matrix.version }} --file Dockerfile
+    - name: Build the latest Docker image
+      if: matrix.version == '15.2'
+      run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t martlark/pg_dump:${{ matrix.version }} -t martlark/pg_dump:latest --file Dockerfile
     - name: Log into docker.io
       if: github.event_name != 'pull_request'
       uses: docker/login-action@28218f9b04b4f3f62068d7b6ce6ca5b26e35336c
