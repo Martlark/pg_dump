@@ -1,5 +1,5 @@
 ARG POSTGRES_VERSION=12.1
-FROM postgres:${POSTGRES_VERSION}-bullseye
+FROM postgres:${POSTGRES_VERSION}
 LABEL org.opencontainers.image.authors="rowe.andrew.d@gmail.com"
 
 RUN \
