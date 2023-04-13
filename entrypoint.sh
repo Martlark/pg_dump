@@ -97,7 +97,9 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
 
     if [[ "${RUN_DOUBLE}" == "false" ]];
     then
-      /usr/local/bin/docker-entrypoint.sh postgres > /dump/postgres.log 2>&1 & # Run in one container
+      # Run postgres in the background. After testing, the cron task does not execute
+      # unless the $LOGFIFO is followed requiring this.
+      /usr/local/bin/docker-entrypoint.sh postgres > ${PGDUMP}/postgres.log 2>&1 &
     fi
     tail -f ${LOGFIFO} # For cron to run this file must be followed
 else
