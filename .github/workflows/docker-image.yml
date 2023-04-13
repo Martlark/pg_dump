@@ -11,9 +11,6 @@ on:
 env:
   DOCKER_REG: brconn98
 
-env:
-  DOCKER_REG: brconn98
-
 jobs:
 
   bld-and-push:
