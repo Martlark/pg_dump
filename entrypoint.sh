@@ -95,12 +95,11 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     # crontab -l
     cron
 
-    if [[ "${RUN_DOUBLE}" == "true" ]];
+    if [[ "${RUN_DOUBLE}" == "false" ]];
     then
-      tail -f ${LOGFIFO} # Run in two containers
-    else
-      /usr/local/bin/docker-entrypoint.sh postgres # Run in one container
+      /usr/local/bin/docker-entrypoint.sh postgres > /dump/postgres.log 2>&1 & # Run in one container
     fi
+    tail -f ${LOGFIFO} # For cron to run this file must be followed
 else
     echo "Unknown command: $COMMAND"
     echo "Available commands: dump, dump-cron"
