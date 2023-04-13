@@ -8,9 +8,6 @@ on:
   pull_request:
     branches: [ "master" ]
     
-env:
-  DOCKER_REG: martlark
-
 jobs:
 
   bld-and-push:
