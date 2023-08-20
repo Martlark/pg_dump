@@ -4,9 +4,13 @@ LABEL org.opencontainers.image.authors="rowe.andrew.d@gmail.com"
 
 RUN \
 apt-get update && \
-apt-get install -y cron  && \
+apt-get install -y cron python3 && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /tmp
+
+RUN pip install -r /tmp/requirements.txt
 
 EXPOSE 5432
 ENV PGDATA="/data"

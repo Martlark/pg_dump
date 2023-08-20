@@ -112,7 +112,7 @@ Tagged versions
 
 Versions available on docker hub are:
 
-    11.19 12.14 13.10 14.7 15.2``
+    11.19 12.14 13.10 14.7 15.2
 	
     latest is 15.2
 
