@@ -1,4 +1,6 @@
 #!/bin/bash
+# dump and delete old backups
+# note: executes as postgres
 
 set -e
 
@@ -8,13 +10,14 @@ POSTGRES_DB=${POSTGRES_DB:-postgres}
 PGHOST=${PGHOST:-localhost}
 PGPORT=${PGPORT:-5432}
 PGDUMP=${PGDUMP:-'/dump'}
+export PGPASSWORD=${PGPASSWORD:-$POSTGRES_PASSWORD}
 
 DATE=$(date +%Y%m%d_%H%M%S)
 FILE="$PGDUMP/$PREFIX-$POSTGRES_DB-$DATE.sql"
 
 echo "Job started: $(date). Dumping to ${FILE}"
 
-pg_dump -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -f "$FILE" -d "$POSTGRES_DB"
+pg_dump -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -f "$FILE" -d "$POSTGRES_DB" -v
 gzip "$FILE"
 
 if [[ -n "${RETAIN_COUNT}" ]]; then

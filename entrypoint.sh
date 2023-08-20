@@ -1,7 +1,8 @@
 #!/bin/bash
 # entrypoint.sh
+# note: executes as postgres
 set -e
-
+echo "Starting pg_dump" > /tmp/dump-log
 if [[ -z $COMMAND ]];
 then
    COMMAND=${1:-dump-cron}
@@ -54,10 +55,10 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     	CRON_ENV="$CRON_ENV\nRETAIN_COUNT='${RETAIN_COUNT}'"
     fi
 
-    echo -e "$CRON_ENV\n$CRON_SCHEDULE" /dump.sh | crontab -
-    # crontab -l
+    echo -e "$CRON_ENV\n$CRON_SCHEDULE" '/dump.sh >> /tmp/dump-log' | crontab -
+#    crontab -l
     cron
-
+    tail -F /tmp/dump-log
 else
     echo "Unknown command: $COMMAND"
     echo "Available commands: dump, dump-cron"

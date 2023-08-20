@@ -23,7 +23,6 @@ runs every day at 1:00 am).
 | `RETAIN_COUNT`           | `None`       | Optional   | `None`                | Optionally, a number to retain, delete older files                            |
 | `PREFIX`                 | `None`       | Optional   | dump                  | Optionally, prefix for dump files                                             |
 | `PGDUMP`                 | `None`       | Optional   | /dump                 | Optionally, define a different location to dump your backups.                 |
-| `PG_LOG`                 | `None`       | Optional   | `None`                | Optionally, set any value to view this env inside of the container            |
 | `COMMAND`                | `None`       | Optional   | `dump-cron` | Options: `dump` dumps the database and exit, `dump-cron` creates a cron job and runs    |
 | `POSTGRES_PASSWORD_FILE` | `None`       | Recomended | `None`                | Location of the password file. Overrides `POSTGRES_PASSWORD` and `PGPASSWORD` |
 
@@ -40,7 +39,7 @@ the default. PGPORT is the exposed port in the container, so it is recommended n
 
 ## Docker Compose
 
-Always run as seperate services with pgdump running alongside the main Postgres database service.
+Always run as separate services with `pgdump` running alongside the main Postgres database service.
 
 ### Example of running with separate services.
 
@@ -67,6 +66,12 @@ services:
       - RETAIN_COUNT=4 # Keep this number of backups
     volumes:
       - ./persistent/data:/dump
+```
+
+### Example asswords file
+
+```text
+POSTGRES_PASSWORD=SumPassw0rdHere
 ```
 
 Tagged versions
