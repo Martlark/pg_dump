@@ -12,37 +12,12 @@ PREFIX=${PREFIX:-dump}
 PGUSER=${PGUSER:-postgres}
 PGPORT=${PGPORT:-5432}
 PGDUMP=${PGDUMP:-'/dump'}
-RUN_DOUBLE=${RUN_DOUBLE:-"true"}
-
-if [[ ${RUN_DOUBLE} == "true" ]];
-then
-   PGHOST=${PGHOST:-db}
-else
-   PGHOST=${PGHOST:-localhost}
-fi
 
 if [[ -n ${PGDB} ]];
 then
    POSTGRES_DB=${PGDB:-postgres}
 else 
    POSTGRES_DB=${POSTGRES_DB:-postgres}
-fi
-
-if [[ -n ${PG_LOG} ]];
-then
-   echo "COMMAND: ${COMMAND}"
-   echo "CRON_SCHEDULE: ${CRON_SCHEDULE}"
-   echo "PREFIX: ${PREFIX}"
-   echo "PGUSER: ${PGUSER}"
-   echo "POSTGRES_DB: ${POSTGRES_DB}"
-   echo "PGHOST: ${PGHOST}"
-   echo "PGPORT: ${PGPORT}"
-   echo "PGDUMP: ${PGDUMP}"
-
-   if [[ -n ${POSTGRES_PASSWORD_FILE} ]];
-   then
-      echo "POSTGRES_PASSWORD_FILE: ${POSTGRES_PASSWORD_FILE}"
-   fi
 fi
 
 if [[ -f ${POSTGRES_PASSWORD_FILE} ]];
@@ -70,18 +45,6 @@ if [[ "${COMMAND}" == 'dump' ]]; then
     exec /dump.sh
 elif [[ "${COMMAND}" == 'dump-cron' ]]; then
 
-    if [[ -z ${LOGFIFO} ]];
-    then
-      LOGFIFO=${PGDUMP}/cron.fifo
-    fi
-
-    if [[ -n ${PG_LOG} ]];
-    then
-        echo "LOGFIFO: ${LOGFIFO}"
-    fi
-    if [[ ! -e "${LOGFIFO}" ]]; then
-        mkfifo "${LOGFIFO}"
-    fi
     CRON_ENV="PREFIX='$PREFIX'\nPGUSER='${PGUSER}'\nPOSTGRES_DB='${POSTGRES_DB}'\nPGHOST='${PGHOST}'\nPGPORT='${PGPORT}'\nPGDUMP='${PGDUMP}'"
     if [[ -n "${POSTGRES_PASSWORD}" ]]; then
         CRON_ENV="$CRON_ENV\nPOSTGRES_PASSWORD='${POSTGRES_PASSWORD}'"
@@ -91,17 +54,10 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     	CRON_ENV="$CRON_ENV\nRETAIN_COUNT='${RETAIN_COUNT}'"
     fi
 
-    echo -e "$CRON_ENV\n$CRON_SCHEDULE /dump.sh > $LOGFIFO 2>&1" | crontab -
+    echo -e "$CRON_ENV\n$CRON_SCHEDULE" /dump.sh | crontab -
     # crontab -l
     cron
 
-    if [[ "${RUN_DOUBLE}" == "false" ]];
-    then
-      # Run postgres in the background. After testing, the cron task does not execute
-      # unless the $LOGFIFO is followed requiring this.
-      /usr/local/bin/docker-entrypoint.sh postgres > ${PGDUMP}/postgres.log 2>&1 &
-    fi
-    tail -f ${LOGFIFO} # For cron to run this file must be followed
 else
     echo "Unknown command: $COMMAND"
     echo "Available commands: dump, dump-cron"
