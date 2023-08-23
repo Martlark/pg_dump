@@ -68,7 +68,7 @@ services:
       - ./persistent/data:/dump
 ```
 
-### Example asswords file
+### Example passwords file
 
 ```text
 POSTGRES_PASSWORD=SumPassw0rdHere
