@@ -24,13 +24,13 @@ runs every day at 1:00 am).
 | `PREFIX`                 | `None`       | Optional   | dump                  | Optionally, prefix for dump files                                             |
 | `PGDUMP`                 | `None`       | Optional   | /dump                 | Optionally, define a different location to dump your backups.                 |
 | `COMMAND`                | `None`       | Optional   | `dump-cron` | Options: `dump` dumps the database and exit, `dump-cron` creates a cron job and runs    |
-| `POSTGRES_PASSWORD_FILE` | `None`       | Recommended | `None`                | Location of the password file. Overrides `POSTGRES_PASSWORD` and `PGPASSWORD` |
-| `S3_ACCESS_KEY`                | `None`       | Required for S3 sync   | `None` | Access key to connect to S3. Example: `AKIAIOSFODNN7EXAMPLE`    |
-| `S3_SECRET_KEY`                | `None`       | Required for S3 sync   | `None` | Secret key to connect to S3. Example: `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY`    |
-| `S3_BUCKET_PATH`                | `None`       | Required for S3 sync   | `None` | Full path to the bucket and directory to store the dumps. Example: `s3://my-bucket/db-dumps/`   |
-| `S3_HOSTNAME`                | `None`       | Optional   | `s3.amazonaws.com` | Configurable for a non-AWS S3 implementation. Example: `mys3server.local`    |
-| `S3_HOST_BUCKET`                | `None`       | Optional   | `%(bucket)s.s3.amazonaws.com` | Configurable for a non-AWS S3 implementation. Example: `mys3server.local/%(bucket)`    |
-| `S3_SSL_OPTION`                | `None`       | Optional   | `--ssl` | Options: `--ssl` to enable SSL, `--no-ssl` to disable SSL    |
+| `POSTGRES_PASSWORD_FILE` | `None`       | Recommended | `None`               | Location of the password file. Overrides `POSTGRES_PASSWORD` and `PGPASSWORD` |
+| `S3_ACCESS_KEY`          | `None`       | Required for S3 sync   | `None` | Access key to connect to S3. Example: `AKIAIOSFODNN7EXAMPLE`                     |
+| `S3_SECRET_KEY`          | `None`       | Required for S3 sync   | `None` | Secret key to connect to S3. Example: `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` |
+| `S3_BUCKET_PATH` | `None` | Required for S3 sync  | `None`   | Full path to the bucket and directory to store the dumps. Example: `s3://my-bucket/db-dumps/` |
+| `S3_HOSTNAME`    | `None` | Optional  | `s3.amazonaws.com`            | Configurable for a non-AWS S3 implementation. Example: `mys3server.local`            |
+| `S3_HOST_BUCKET` | `None` | Optional  | `%(bucket)s.s3.amazonaws.com` | Configurable for a non-AWS S3 implementation. Example: `mys3server.local/%(bucket)`  |
+| `S3_SSL_OPTION`  | `None` | Optional  | `--ssl`                       | Options: `--ssl` to enable SSL, `--no-ssl` to disable SSL                            |
 
 ## Optional Controls
 
