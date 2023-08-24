@@ -1,4 +1,4 @@
-ARG POSTGRES_VERSION=14.8
+ARG POSTGRES_VERSION=12.14
 FROM postgres:${POSTGRES_VERSION}-bullseye
 LABEL org.opencontainers.image.authors="rowe.andrew.d@gmail.com"
 
