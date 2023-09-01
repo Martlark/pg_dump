@@ -24,7 +24,7 @@ gzip "$FILE"
 if [[ -n "${RETAIN_COUNT}" ]]; then
     file_count=1
     for file_name in $(ls -t $PGDUMP/*.gz); do
-        if [[ ${file_count} > ${RETAIN_COUNT} ]]; then
+        if (( ${file_count} > ${RETAIN_COUNT} )); then
             echo "Removing older dump file: ${file_name}"
             rm "${file_name}"
         fi
