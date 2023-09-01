@@ -52,7 +52,7 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     fi
 
     if [[ ! -z "${RETAIN_COUNT}" ]]; then
-        CRON_ENV="$CRON_ENV\nRETAIN_COUNT='${RETAIN_COUNT}'"
+        CRON_ENV="$CRON_ENV\nRETAIN_COUNT=${RETAIN_COUNT}"
     fi
 
     # S3 settings
