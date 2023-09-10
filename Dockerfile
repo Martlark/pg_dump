@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.authors="rowe.andrew.d@gmail.com"
 RUN \
 apt-get update && \
 apt-get install -y cron  && \
+apt-get install -y s3cmd  && \
 apt-get clean && \
 rm -rf /var/lib/apt/lists/*
 
@@ -12,6 +13,11 @@ EXPOSE 5432
 ENV PGDATA="/data"
 ENV PGDUMP="/dump"
 ENV PGUSER=postgres
+
+# S3 defaults
+ENV S3_HOSTNAME="s3.amazonaws.com"
+ENV S3_HOST_BUCKET="%(bucket)s.s3.amazonaws.com"
+ENV S3_SSL_OPTION="--ssl"
 
 COPY --chown=${PGUSER}:${PGUSER} \
    [ "dump.sh", \

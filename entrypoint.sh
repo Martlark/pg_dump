@@ -52,13 +52,29 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     fi
 
     if [[ ! -z "${RETAIN_COUNT}" ]]; then
-    	CRON_ENV="$CRON_ENV\nRETAIN_COUNT='${RETAIN_COUNT}'"
+        CRON_ENV="$CRON_ENV\nRETAIN_COUNT=${RETAIN_COUNT}"
     fi
 
-    echo -e "$CRON_ENV\n$CRON_SCHEDULE" '/dump.sh >> /tmp/dump-log' | crontab -
+    # S3 settings
+    CRON_ENV="$CRON_ENV\nS3_HOSTNAME='${S3_HOSTNAME}'"
+    CRON_ENV="$CRON_ENV\nS3_HOST_BUCKET='${S3_HOST_BUCKET}'"
+    CRON_ENV="$CRON_ENV\nS3_SSL_OPTION='${S3_SSL_OPTION}'"
+    if [[ ! -z "${S3_ACCESS_KEY}" ]]; then
+        CRON_ENV="$CRON_ENV\nS3_ACCESS_KEY='${S3_ACCESS_KEY}'"
+    fi
+
+    if [[ ! -z "${S3_SECRET_KEY}" ]]; then
+        CRON_ENV="$CRON_ENV\nS3_SECRET_KEY='${S3_SECRET_KEY}'"
+    fi
+
+    if [[ ! -z "${S3_BUCKET_PATH}" ]]; then
+        CRON_ENV="$CRON_ENV\nS3_BUCKET_PATH='${S3_BUCKET_PATH}'"
+    fi
+
+    echo -e "$CRON_ENV\n$CRON_SCHEDULE" "/dump.sh >> ${PGDUMP}/dump-log" | crontab -
 #    crontab -l
     cron
-    tail -F /tmp/dump-log
+    tail -F "${PGDUMP}/dump-log"
 else
     echo "Unknown command: $COMMAND"
     echo "Available commands: dump, dump-cron"
