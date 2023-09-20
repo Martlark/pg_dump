@@ -1,4 +1,4 @@
-ARG POSTGRES_VERSION=12.14
+ARG POSTGRES_VERSION=12.16
 FROM postgres:${POSTGRES_VERSION}-bullseye
 LABEL org.opencontainers.image.authors="rowe.andrew.d@gmail.com"
 
@@ -40,5 +40,5 @@ VOLUME [ "${PGDUMP}", "${PGDATA}" ]
 
 USER ${PGUSER}
 
-ENTRYPOINT ["bash", "/entrypoint.sh"]
+ENTRYPOINT ["bash", "-x", "/entrypoint.sh"]
 CMD ["dump-cron"]

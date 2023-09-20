@@ -1,5 +1,17 @@
 VERSIONS := $(shell cat VERSIONS)
 
+dc-build:
+	docker-compose -f docker-compose-dev.yml build backup
+
+dc-up: dc-build
+	docker-compose -f docker-compose-dev.yml up -d backup
+
+dc-bash:
+	docker-compose -f docker-compose-dev.yml exec backup bash
+
+dc-stop:
+	docker-compose -f docker-compose-dev.yml stop backup
+
 login:
 	docker login
 

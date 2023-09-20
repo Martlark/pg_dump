@@ -2,8 +2,6 @@
 # dump and delete old backups
 # note: executes as postgres
 
-set -e
-
 PREFIX=${PREFIX:-dump}
 PGUSER=${PGUSER:-postgres}
 POSTGRES_DB=${POSTGRES_DB:-postgres}
@@ -35,13 +33,21 @@ else
 fi
 
 # Sync dumps with S3
+
+# S3 Options
+
+S3_SYNC_OPTION=${S3_SYNC_OPTION:---delete-after --delete-removed}
+
 if [[ -n "${S3_ACCESS_KEY}" && -n "${S3_SECRET_KEY}" && -n "${S3_BUCKET_PATH}" ]]; then
+
     TRIMMED_BUCKET_PATH=$(echo "${S3_BUCKET_PATH}" | sed 's:/*$::')
     echo "Syncing with S3: ${PGDUMP}/ -> ${TRIMMED_BUCKET_PATH}/"
     s3cmd --access_key "${S3_ACCESS_KEY}" --secret_key "${S3_SECRET_KEY}" \
           --host "${S3_HOSTNAME}" --host-bucket "${S3_HOST_BUCKET}" \
-          --delete-after --delete-removed "${S3_SSL_OPTION}" \
+          --exclude "dump-log" \
+          ${S3_SYNC_OPTION} "${S3_SSL_OPTION}" \
           sync "${PGDUMP}/" "${TRIMMED_BUCKET_PATH}/"
+
 fi
 
 echo "Job finished: $(date)"

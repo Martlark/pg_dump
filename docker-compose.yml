@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   database:
-    image: postgres:12.14
+    image: postgres:12.16
     volumes:
       - ./persistent/data:/var/lib/postgresql/data
     environment:
@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
 
   backup:
-    image: martlark/pg_dump:12.14
+    image: martlark/pg_dump:12.16
     container_name: postgres-backup
     environment:
       - PGPASSWORD=SumPassw0rdHere
