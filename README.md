@@ -50,7 +50,25 @@ If required to retain backups on the local or bucket, then use:
 
     S3_SYNC_OPTION="--no-delete-removed"
 
-For don't delete destination objects.
+### Example
+    
+    version: "3.9"
+    services:
+      backup:
+        build: .
+        environment:
+          - POSTGRES_PASSWORD=SumPassw0rdHere
+          - POSTGRES_DB=postgres
+          - PGHOST=database # The hostname of the PostgreSQL database to dump
+          - CRON_SCHEDULE=*/15 * * * * # Every 15 minutes
+          - RETAIN_COUNT=3 # Keep this number of backups
+          - S3_BUCKET_PATH=s3://${S3_BUCKET_NAME}/
+          - S3_SECRET_KEY=${S3_SECRET_KEY}
+          - S3_ACCESS_KEY=${S3_ACCESS_KEY}
+        volumes:
+          - ./persistent/dump:/dump
+        restart: unless-stopped
+
 
 ### Not AWS
 
