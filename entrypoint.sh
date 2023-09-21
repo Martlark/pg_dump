@@ -2,7 +2,8 @@
 # entrypoint.sh
 # note: executes as postgres
 set -e
-echo "Starting pg_dump" > /tmp/dump-log
+PGDUMP=${PGDUMP:-'/dump'}
+echo "Starting pg_dump" | tee "${PGDUMP}/dump-log"
 if [[ -z $COMMAND ]];
 then
    COMMAND=${1:-dump-cron}
@@ -12,9 +13,8 @@ CRON_SCHEDULE=${CRON_SCHEDULE:-0 1 * * *}
 PREFIX=${PREFIX:-dump}
 PGUSER=${PGUSER:-postgres}
 PGPORT=${PGPORT:-5432}
-PGDUMP=${PGDUMP:-'/dump'}
 
-if [[ -n ${PGDB} ]];
+if [[ -n "${PGDB}" ]];
 then
    POSTGRES_DB=${PGDB:-postgres}
 else 
@@ -28,7 +28,7 @@ else
    echo "WARN: No password file found!"
    echo "It is suggested that a docker secrets file is used for security concerns."
 
-   if [[ -n ${PGPASSWORD} ]];
+   if [[ -n "${PGPASSWORD}" ]];
    then
       POSTGRES_PASSWORD=${PGPASSWORD}
    elif [[ -z ${POSTGRES_PASSWORD} ]];
@@ -71,7 +71,7 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
         CRON_ENV="$CRON_ENV\nS3_BUCKET_PATH='${S3_BUCKET_PATH}'"
     fi
 
-    echo -e "$CRON_ENV\n$CRON_SCHEDULE" "/dump.sh >> ${PGDUMP}/dump-log" | crontab -
+    echo -e "$CRON_ENV\n$CRON_SCHEDULE" "/dump.sh >> ${PGDUMP}/dump-log 2>&1" | crontab -
 #    crontab -l
     cron
     tail -F "${PGDUMP}/dump-log"
