@@ -1,0 +1,6 @@
+.env
+Makefile
+persistent
+venv*
+db_password.txt
+*.yml

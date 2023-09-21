@@ -15,13 +15,13 @@ dc-stop:
 login:
 	docker login
 
-versions: login
+version:
 	for version in $(VERSIONS); do \
 		docker build . --build-arg POSTGRES_VERSION=$$version -t pg_dump:$$version ;\
 	done
 	docker build . --build-arg POSTGRES_VERSION=$(lastword $(VERSIONS)) -t pg_dump:latest
 
-push: versions
+push: version login
 	for version in $(VERSIONS); do \
 		docker push martlark/pg_dump:$$version; \
 	done
