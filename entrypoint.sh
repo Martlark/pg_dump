@@ -21,9 +21,9 @@ else
    POSTGRES_DB=${POSTGRES_DB:-postgres}
 fi
 
-if [[ -f ${POSTGRES_PASSWORD_FILE} ]];
+if [[ -f "${POSTGRES_PASSWORD_FILE}" ]];
 then
-   source ${POSTGRES_PASSWORD_FILE}
+   source "${POSTGRES_PASSWORD_FILE}"
 else
    echo "WARN: No password file found!"
    echo "It is suggested that a docker secrets file is used for security concerns."
@@ -72,7 +72,7 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     fi
 
     echo -e "$CRON_ENV\n$CRON_SCHEDULE" "/dump.sh >> ${PGDUMP}/dump-log 2>&1" | crontab -
-#    crontab -l
+    crontab -l  >> " ${PGDUMP}/dump-log" 2>&1
     cron
     tail -F "${PGDUMP}/dump-log"
 else
