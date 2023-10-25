@@ -20,3 +20,25 @@ services:
       - RETAIN_COUNT=1 # Keep this number of backups
     volumes:
       - ./persistent/data:/dump
+
+  database-15-2:
+    image: postgres:15.2
+    volumes:
+      - ./persistent/data-15-2:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=SumPassw0rdHere
+      - POSTGRES_DB=db
+    restart: unless-stopped
+
+  backup-15-2:
+    image: martlark/pg_dump:15.2
+    depends_on:
+      - database-15-2
+    environment:
+      - PGPASSWORD=SumPassw0rdHere
+      - PGDB=db # The name of the database to dump
+      - PGHOST=database-15-2 # The hostname of the PostgreSQL database to dump
+      - CRON_SCHEDULE=0 3 * * * # Every day at 3am
+      - RETAIN_COUNT=1 # Keep this number of backups
+    volumes:
+      - ./persistent/data-15-2:/dump

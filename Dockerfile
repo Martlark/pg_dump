@@ -40,5 +40,5 @@ VOLUME [ "${PGDUMP}", "${PGDATA}" ]
 
 USER ${PGUSER}
 
-ENTRYPOINT ["bash", "-x", "/entrypoint.sh"]
+ENTRYPOINT ["bash", "/entrypoint.sh"]
 CMD ["dump-cron"]

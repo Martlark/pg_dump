@@ -1,7 +1,7 @@
 #!/bin/bash
 # entrypoint.sh
 # note: executes as postgres
-set -e
+
 PGDUMP=${PGDUMP:-'/dump'}
 echo "Starting pg_dump" | tee "${PGDUMP}/dump-log"
 if [[ -z $COMMAND ]];
@@ -72,7 +72,7 @@ elif [[ "${COMMAND}" == 'dump-cron' ]]; then
     fi
 
     echo -e "$CRON_ENV\n$CRON_SCHEDULE" "/dump.sh >> ${PGDUMP}/dump-log 2>&1" | crontab -
-    crontab -l  >> " ${PGDUMP}/dump-log" 2>&1
+    crontab -l  >> "${PGDUMP}/dump-log" 2>&1
     cron
     tail -F "${PGDUMP}/dump-log"
 else

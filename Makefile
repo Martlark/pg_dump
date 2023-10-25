@@ -1,4 +1,6 @@
 VERSIONS := $(shell cat VERSIONS)
+REVISION := b
+NAME := "martlark/pg_dump"
 
 dc-build:
 	docker-compose -f docker-compose-dev.yml build backup-12-16 backup-15-2
@@ -20,12 +22,13 @@ login:
 
 version:
 	for version in $(VERSIONS); do \
-		docker build . --build-arg POSTGRES_VERSION=$$version -t pg_dump:$$version ;\
+		docker image build . --build-arg POSTGRES_VERSION=$$version -t $(NAME):$$version-$(REVISION) -t $(NAME):$$version ;\
 	done
-	docker build . --build-arg POSTGRES_VERSION=$(lastword $(VERSIONS)) -t pg_dump:latest
+	docker image build . --build-arg POSTGRES_VERSION=$(lastword $(VERSIONS)) -t $(NAME):latest
 
 push: version login
 	for version in $(VERSIONS); do \
-		docker push martlark/pg_dump:$$version; \
+		docker image push $(NAME):$$version-$(REVISION); \
+		docker image push $(NAME):$$version; \
 	done
-	docker push martlark/pg_dump:latest
+	docker image push $(NAME):latest
