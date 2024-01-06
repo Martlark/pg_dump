@@ -6,8 +6,8 @@ here: https://hub.docker.com/repository/docker/martlark/pg_dump
 
 ## Usage
 
-Import a PostgreSQL database into this container and mount a volume to the containers `/dump` folder. 
-Backups will appear in this volume. Optionally set up cron job schedule (default is `0 1 * * *` - 
+Import a PostgreSQL database into this container and mount a volume to the containers `/dump` folder.
+Backups will appear in this volume. Optionally set up cron job schedule (default is `0 1 * * *` -
 runs every day at 1:00 am).
 
 ## Environment Variables:
@@ -41,7 +41,7 @@ Environment Variables table.
 ### Sync as default
 
 By default, only backups in the container volume are retained in a bucket. These default options are used :
-    
+
     --delete-removed      Delete destination objects with no corresponding
                             source file [sync]
     --delete-after        Perform deletes after new uploads [sync]
@@ -51,7 +51,7 @@ If required to retain backups on the local or bucket, then use:
     S3_SYNC_OPTION="--no-delete-removed"
 
 ### Example
-    
+
     version: "3.9"
     services:
       backup:
@@ -84,15 +84,15 @@ a full list of options.
 ## Optional Controls
 
 By default, this container executes as the postgres user. Using a non-root user for your container
-is always a safer route and should be one of your first modifications. 
+is always a safer route and should be one of your first modifications.
 
-The POSTGRES_PASSWORD field can 
+The POSTGRES_PASSWORD field can
 either be set via environment variable or via docker secrets. Again, for security reasons, it is
-always recommended to use docker secrets for security concerns. 
+always recommended to use docker secrets for security concerns.
 
 If using the docker secrets, set the
-POSTGRES_PASSWORD_FILE field, warning this overrides POSTGRES_PASSWORD and PGPASSWORD. An example secrets 
-file can be found below in the docker-compose area. 
+POSTGRES_PASSWORD_FILE field, warning this overrides POSTGRES_PASSWORD and PGPASSWORD. An example secrets
+file can be found below in the docker-compose area.
 
 PGPORT is the exposed port in the container, so it is recommended not to change this.
 
@@ -143,7 +143,7 @@ previous tagged versions will be maintained.
 
 Versions available on docker hub are:
 
-    11.19 11.21 12.12 12.16 13.12 14.7 14.9 15.2 15.4
-	
-    latest is 15.4
+    11.19 11.21 12.12 12.16 13.12 14.7 14.9 15.2 15.4 16.1
+
+    latest is 16.1
 
