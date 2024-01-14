@@ -7,22 +7,22 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-    
+
 jobs:
 
   bld-and-push:
     strategy:
       matrix:
-        version: ['11.19', '11.21'', '12.12', '12.16', '13.12', '14.7', '14.9', '15.2', '15.4']
+        version: ['11.19', '11.21'', '12.12', '12.16', '13.12', '14.7', '14.9', '15.2', '15.4', '16.1']
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Build the Docker image
-      if: matrix.version != '15.4'
+      if: matrix.version != '16.1'
       run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t ${{ vars.DOCKER_REG }}/pg_dump:${{ matrix.version }} --file Dockerfile
     - name: Build the latest Docker image
-      if: matrix.version == '15.4'
+      if: matrix.version == '16.1'
       run: docker build . --build-arg POSTGRES_VERSION=${{ matrix.version }} -t ${{ vars.DOCKER_REG }}/pg_dump:${{ matrix.version }} -t ${{ vars.DOCKER_REG }}/pg_dump:latest --file Dockerfile
     - name: Log into docker.io
       if: github.event_name != 'pull_request'
